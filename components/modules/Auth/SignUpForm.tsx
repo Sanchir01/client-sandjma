@@ -4,13 +4,22 @@ import NameInput from '@/components/elements/Auth/NameInput'
 import PasswordInput from '@/components/elements/Auth/PasswordInput'
 import EmailInput from '@/components/elements/Auth/EmailInput'
 import{useForm} from 'react-hook-form'
-import { IInput } from '@/types/Auth.interface'
+import { IInput, ISignUpFx } from '@/types/Auth.interface'
+import { useMutation } from '@tanstack/react-query'
+import { AllAuth } from '@/service/Users.service'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
-	const {register,formState:{errors},handleSubmit} = useForm<IInput>()
+	const {register,formState:{errors},handleSubmit,resetField} = useForm<IInput>()
 
-    const onSubmit = (data:IInput)=>{
-		console.log(data)
+	const mutation = useMutation((data:IInput) => AllAuth.CreateUser(data),)
+
+    const onSubmit = async (data:IInput)=>{
+		
+		mutation.mutate(data)
+		resetField('username')
+		resetField('password')
+		resetField('email')
+		switchForm()
 	}
 
 	return (

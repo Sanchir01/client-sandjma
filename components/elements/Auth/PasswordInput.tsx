@@ -6,7 +6,7 @@ const PasswordInput = ({ register, errors }: IAuthInput) => {
 		<label className={styles.form__label}>
 			<input
 				{...register('password', {
-					required: 'Введите пароль',
+					required: 'Введите password',
 					minLength: 4,
 					maxLength: 100
 				})}

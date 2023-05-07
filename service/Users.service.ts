@@ -1,11 +1,14 @@
 import { IInput } from '@/types/Auth.interface'
 import axios from 'axios'
 
-const instance = axios.create({
-    withCredentials: true,
-    baseURL:`${process.env.NEXT_PUBLIC_SERVER_URL}`
+export const instance = axios.create({
+	withCredentials: true
 })
-
-async function CreateUser (data:IInput){
-    return axios.post('/users/signup', data)
+axios.defaults.baseURL = `http://localhost:5000`
+export const AllAuth = {
+	async CreateUser(data: IInput) {
+		return axios.post(`/users/signup`, data, {
+			headers: { 'Content-Type': 'application/json' }
+		})
+	}
 }
