@@ -2,14 +2,15 @@ import React from 'react'
 import styles from '@/styles/Auth/index.module.scss'
 import NameInput from '@/components/elements/Auth/NameInput'
 import PasswordInput from '@/components/elements/Auth/PasswordInput'
-import EmailInput from '@/components/elements/Auth/EmailInput'
 import { useForm } from 'react-hook-form'
-import { IInput } from '@/types/Auth.interface'
+import { IInput, SignIn } from '@/types/Auth.interface'
 import { useMutation } from '@tanstack/react-query'
 import { AllAuth } from '@/service/Users.service'
-import spinnerStyles from '@/styles/Spinner/index.module.scss'
 
-const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
+import spinnerStyles from '@/styles/Spinner/index.module.scss'
+import { useRouter } from 'next/router'
+
+const SignInForm = () => {
 	const [spinner, setSpinner] = React.useState(false)
 	const {
 		register,
@@ -18,26 +19,23 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
 		resetField
 	} = useForm<IInput>()
 
-	const mutation = useMutation((data: IInput) => AllAuth.CreateUser(data), {
-		onSuccess:() =>{
-			alert('удачная регтсьрация')
-		},
+
+	const route = useRouter()
+
+	const mutation = useMutation((data: SignIn) => AllAuth.SignIn(data), {
+       
 		onError: () => {
-			alert('Такой Email или Nickname уже есть')
+			alert('неправильный пароль или никнейм')
 		}
 	})
 
-	const onSubmit = async (data: IInput) => {
+ 
+	const onSubmit = async (data: SignIn) => {
 		try {
-			setSpinner(true)
 			mutation.mutate(data)
-			if (mutation.isError) {
-				return null
-			}
 			resetField('username')
 			resetField('password')
-			resetField('email')
-			switchForm()
+			route.push('/dashboard')
 		} catch (error) {
 			return null
 		} finally {
@@ -48,19 +46,18 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
 	return (
 		<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 			<h2 className={`${styles.title} ${styles.form_title}`}>
-				создать аккаунт
+				Войти в аккаунт
 			</h2>
+
 			<NameInput register={register} errors={errors} />
 			<PasswordInput register={register} errors={errors} />
-			<EmailInput register={register} errors={errors} />
-
 			<button
 				className={`${styles.button} ${styles.submit} ${styles.form__button}`}
 			>
-				{spinner ? <div className={spinnerStyles.spinner}></div> : 'SIGN UP'}
+				{spinner ? <div className={spinnerStyles.spinner}></div> : 'SIGN IN'}
 			</button>
 		</form>
 	)
 }
 
-export default SignUpForm
+export default SignInForm

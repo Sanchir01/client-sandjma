@@ -1,4 +1,4 @@
-import { IAuthInput } from '@/types/Auth.interface'
+import { IAuthInput, SignIn } from '@/types/Auth.interface'
 import styles from '@/styles/Auth/index.module.scss'
 
 const PasswordInput = ({ register, errors }: IAuthInput) => {

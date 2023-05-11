@@ -1,10 +1,11 @@
-import { useRef, MutableRefObject } from 'react'
+import SignInForm from '@/components/modules/Auth/SignInForm'
+import SignUpForm from '@/components/modules/Auth/SignUpForm'
 import { useMediaQuery } from '@/hooks/useMediaquery'
 import styles from '@/styles/Auth/index.module.scss'
-import SignUpForm from '@/components/modules/Auth/SignUpForm'
 import { NextPage } from 'next'
+import { MutableRefObject, useRef } from 'react'
 
-const AuthPage:NextPage = () => {
+const AuthPage: NextPage = () => {
 	const isMedia800 = useMediaQuery(800)
 
 	const switchCtn = useRef() as MutableRefObject<HTMLDivElement>
@@ -39,8 +40,8 @@ const AuthPage:NextPage = () => {
 				ref={aContainer}
 			>
 				<div className={styles.container__inner}>
-                    <SignUpForm switchForm={switchForm}/>
-                </div>
+					<SignUpForm switchForm={switchForm} />
+				</div>
 			</div>
 			<div
 				className={`${styles.container} ${styles.b_container}`}
@@ -48,27 +49,7 @@ const AuthPage:NextPage = () => {
 				ref={bContainer}
 			>
 				<div className={styles.container__inner}>
-					<form className={styles.form} id='b-form' method='' action=''>
-						<h2 className={`${styles.title} ${styles.form_title}`}>
-							Sign in to Website
-						</h2>
-
-						<input
-							className={styles.form__input}
-							type='text'
-							placeholder='Email'
-						/>
-						<input
-							className={styles.form__input}
-							type='password'
-							placeholder='Password'
-						/>
-						<button
-							className={`${styles.button} ${styles.submit} ${styles.form__button}`}
-						>
-							SIGN IN
-						</button>
-					</form>
+					<SignInForm />
 				</div>
 			</div>
 			<div className={styles.switch} id='switch-cnt' ref={switchCtn}>
