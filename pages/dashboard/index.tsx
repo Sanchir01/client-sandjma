@@ -1,9 +1,9 @@
+import Footer from '@/components/modules/Footer/Footer'
 import Header from '@/components/modules/Header/Header'
-import AuthPage from '@/components/templates/Auth/AuthPage'
 import { NextPage } from 'next'
 import Head from 'next/head'
 
-const Dashboard:NextPage =() =>{
+const Dashboard: NextPage = () => {
 	return (
 		<>
 			<Head>
@@ -17,7 +17,12 @@ const Dashboard:NextPage =() =>{
 					href='../public/img/logo.svg'
 				/>
 			</Head>
-			<Header/>
+			<Header />
+			<main>
+				<h1>dashboard</h1>
+				<div className='overlay'></div>
+			</main>
+			<Footer/>
 		</>
 	)
 }

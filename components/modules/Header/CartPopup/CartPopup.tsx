@@ -13,7 +13,7 @@ import Link from 'next/link'
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 	({ open, setOpen }, ref) => {
 		const toggleCartDropDown = () => setOpen(!open)
-		const { data, isSuccess } = useQuery<IShoppingCart[] | IShoppingCart>({
+		const { data, isSuccess } = useQuery<IShoppingCart[]>({
 			queryFn: () => ShoppingCart.getAll(),
 			queryKey: ['shoppingCartAll']
 		})
@@ -21,6 +21,9 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 		return (
 			<div className={styles.cart} ref={ref}>
 				<button className={styles.cart__btn} onClick={toggleCartDropDown}>
+					{isSuccess && data?.length && (
+						<span className={styles.cart__btn_count}>{data.length}</span>
+					)}
 					<span className={styles.cart__svg}>
 						<ShoppingCartSVG />
 					</span>
@@ -36,13 +39,13 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 							style={{ transformOrigin: 'right top' }}
 						>
 							<h3 className={styles.cart__popup__title}>Корзина</h3>
-							<ul className={styles.cart__popup_list}>
+							<ul className={styles.cart__popup__list}>
 								{isSuccess ? (
-									data?.map((item: IShoppingCart) => (
+									data.map(item => (
 										<li
 											className={styles.cart__popup__empty}
 											key={item.id}
-										></li>
+										> {item.id}</li>
 									))
 								) : (
 									<span className={styles.cart__popup__text}>
@@ -60,9 +63,9 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 								<Link href={`/order`}>
 									<button
 										className={styles.cart__popup__footer__btn}
-										disabled={!data}
+										disabled={!data?.length}
 									>
-										<span>оплатить</span>
+										<span>оплатить заказ</span>
 									</button>
 								</Link>
 							</div>
