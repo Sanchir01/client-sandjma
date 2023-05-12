@@ -4,10 +4,20 @@ const OnlineStorContent = () => {
 	return (
 		<ul className={styles.footer__top__item__list}>
 			<li className={styles.footer__top__item__list__item}>
-				<Link href={`/catalog`}>Каталог</Link>
+				<Link
+					className={styles.footer__top__item__list__item__link}
+					href={`/catalog`}
+				>
+					Каталог
+				</Link>
 			</li>
 			<li className={styles.footer__top__item__list__item}>
-				<Link href={`/shopping-payment`}>Доставка и оплата</Link>
+				<Link
+					href={`/shopping-payment`}
+					className={styles.footer__top__item__list__item__link}
+				>
+					Доставка и оплата
+				</Link>
 			</li>
 		</ul>
 	)
