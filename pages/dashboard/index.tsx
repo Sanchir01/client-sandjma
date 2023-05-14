@@ -1,5 +1,6 @@
-import Footer from '@/components/modules/Footer/Footer'
-import Header from '@/components/modules/Header/Header'
+import Layout from '@/components/layout/Layout'
+import BGImage from '@/components/modules/DashboardPage/BGImage'
+import DashboardPage from '@/components/templates/DashboardPage/DashboardPage'
 import { NextPage } from 'next'
 import Head from 'next/head'
 
@@ -17,12 +18,13 @@ const Dashboard: NextPage = () => {
 					href='../public/img/logo.svg'
 				/>
 			</Head>
-			<Header />
-			<main>
-				<h1>dashboard</h1>
-				<div className='overlay'></div>
-			</main>
-			<Footer/>
+			<Layout>
+				<main>
+					
+				</main>
+				<BGImage />
+				<DashboardPage/>
+			</Layout>
 		</>
 	)
 }

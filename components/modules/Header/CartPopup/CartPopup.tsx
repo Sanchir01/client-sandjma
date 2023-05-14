@@ -13,7 +13,7 @@ import Link from 'next/link'
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 	({ open, setOpen }, ref) => {
 		const toggleCartDropDown = () => setOpen(!open)
-		const { data, isSuccess } = useQuery<IShoppingCart[]>({
+		const { data, isSuccess } = useQuery<IShoppingCart[] >({
 			queryFn: () => ShoppingCart.getAll(),
 			queryKey: ['shoppingCartAll']
 		})
@@ -41,11 +41,11 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 							<h3 className={styles.cart__popup__title}>Корзина</h3>
 							<ul className={styles.cart__popup__list}>
 								{isSuccess ? (
-									data.map(item => (
+									data.map((item) => (
 										<li
 											className={styles.cart__popup__empty}
 											key={item.id}
-										> {item.id}</li>
+										> {item.price}</li>
 									))
 								) : (
 									<span className={styles.cart__popup__text}>

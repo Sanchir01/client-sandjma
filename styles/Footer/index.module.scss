@@ -93,7 +93,7 @@
              color: #CDCBCB;
  
              &:hover {
-               color: #FFC540;
+               color: #E0BEA2;
                transition: color .2s ease-in-out;
              }
            }
@@ -136,12 +136,12 @@
            }
  
            &:hover span {
-             color: #FFC540;
+             color: #E0BEA2;
              transition: color .2s ease-in-out;
            }
  
            &:hover span svg {
-             stroke: #FFC540;
+             stroke: #E0BEA2;
              transition: stroke .2s ease-in-out;
            }
          }

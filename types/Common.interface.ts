@@ -11,3 +11,7 @@ export interface IOption {
 }
 
 export type SelectOptionType = MultiValue<IOption> | SingleValue<IOption> | null
+
+export interface ILayoutProps {
+	children:React.ReactNode
+}

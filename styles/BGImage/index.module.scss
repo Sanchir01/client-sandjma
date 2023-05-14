@@ -1,0 +1,38 @@
+.app{
+   min-height: 90vh;
+   background-image: url('../../public/sanchir//Header-bg.png');
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center top;
+}
+.root{
+  padding-top: 160px;
+}
+.content{
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+  
+   h2{
+      color: #fff;
+      font-size: 50px;
+      font-weight: 500;
+      padding-bottom: 20px;
+      line-height: 54px;
+      border-bottom: 1px solid #fff ;
+      transition: 0.3s ease-in;
+      &:hover{
+         color: #E0BEA2
+      }
+   }
+   p{
+      color: #fff;
+      font-size: 25px;
+      padding-top: 20px;
+      transition: 0.3s ease-in;
+      &:hover{
+         color: #E0BEA2
+      }
+   }
+}

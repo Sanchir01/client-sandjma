@@ -36,12 +36,12 @@
    }
  
    &__btn.dark_mode:hover &__svg svg {
-     stroke: #FFC540;
+     stroke: #E0BEA2;
      transition: stroke .2s ease-in-out;
    }
  
    &__btn.dark_mode:hover &__text {
-     color: #FFC540;
+     color: #E0BEA2;
      transition: color .2s ease-in-out;
    }
  

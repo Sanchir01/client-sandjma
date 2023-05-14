@@ -8,13 +8,13 @@
    background-color: transparent;
  
    &:hover &__text {
-     fill: #FFC540;
-     color: #FFC540;
+     fill: #E0BEA2;
+     color: #E0BEA2;
      transition: color .2s ease-in-out;
    }
  
    &:hover &__span > svg {
-     fill: #FFC540;
+     fill: #E0BEA2;
      transition: fill .2s ease-in-out;
    }
  
