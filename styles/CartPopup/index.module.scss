@@ -27,7 +27,7 @@
      }
    }
  
-   &__btn.dark_mode &__svg svg {
+    &__svg svg {
      stroke: #f2f2f2;
    }
  
@@ -35,7 +35,7 @@
      color: #f2f2f2;
    }
  
-   &__btn.dark_mode:hover &__svg svg {
+    &__svg svg {
      stroke: #E0BEA2;
      transition: stroke .2s ease-in-out;
    }
@@ -70,9 +70,7 @@
      transform-origin: right top;
      z-index: 10;
  
-     &.dark_mode {
-       background-color: #2d2d2d;
-     }
+    
  
      @media (max-width: 450px) {
        left: -245px;
@@ -177,9 +175,7 @@
            max-width: 142px;
            color: #4E4C4C;
  
-           &.dark_mode {
-             color: #f2f2f2;
-           }
+          
          }
  
          &__empty {
@@ -223,19 +219,13 @@
              color: #4E4C4C;
            }
  
-           &.dark_mode button svg {
-             stroke: white;
-           }
+          
  
-           &.dark_mode span {
-             color: #f2f2f2;
-           }
+           
          }
  
          &__price {
-           &.dark_mode {
-             color: #f2f2f2;
-           }
+          
          }
        }
      }
@@ -251,9 +241,7 @@
          color: #2d2d2d;
          opacity: 0.5;
  
-         &.dark_mode {
-           color: #f2f2f2;
-         }
+         
        }
      }
  
@@ -274,9 +262,7 @@
          font-size: 18px;
          color: #2D2D2D;
  
-         &.dark_mode {
-           color: #f2f2f2;
-         }
+        
        }
  
        &__price {

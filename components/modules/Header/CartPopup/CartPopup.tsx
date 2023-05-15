@@ -1,10 +1,11 @@
+import styles from '@/styles/CartPopup/index.module.scss'
 import { IWrappedComponentProps } from '@/types/Common.interface'
 import { withClickOutside } from '@/utils/withClickOutside'
 import { AnimatePresence, motion } from 'framer-motion'
 import { forwardRef } from 'react'
-import styles from '../../../../styles/CartPopup/index.module.scss'
 
 import ShoppingCartSVG from '@/components/elements/ShoppingCartSVG/ShoppingCartSVG'
+import { Dashboard } from '@/service/Dashboard.service'
 import { ShoppingCart } from '@/service/Shopping-cart.service'
 import { IShoppingCart } from '@/types/Shopping-car.interface'
 import { useQuery } from '@tanstack/react-query'
@@ -13,16 +14,22 @@ import Link from 'next/link'
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 	({ open, setOpen }, ref) => {
 		const toggleCartDropDown = () => setOpen(!open)
-		const { data, isSuccess } = useQuery<IShoppingCart[] >({
+		const { data, isSuccess } = useQuery<IShoppingCart[]>({
 			queryFn: () => ShoppingCart.getAll(),
 			queryKey: ['shoppingCartAll']
+		})
+		const cartCount = useQuery({
+			queryFn: () => Dashboard.getCartCount,
+			queryKey: ['countCart']
 		})
 		console.log(data)
 		return (
 			<div className={styles.cart} ref={ref}>
 				<button className={styles.cart__btn} onClick={toggleCartDropDown}>
-					{isSuccess && data?.length && (
-						<span className={styles.cart__btn_count}>{data.length}</span>
+					{isSuccess && cartCount.data?.length && (
+						<span className={styles.cart__btn__count}>
+							{cartCount.data.length}
+						</span>
 					)}
 					<span className={styles.cart__svg}>
 						<ShoppingCartSVG />
@@ -41,11 +48,11 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 							<h3 className={styles.cart__popup__title}>Корзина</h3>
 							<ul className={styles.cart__popup__list}>
 								{isSuccess ? (
-									data.map((item) => (
-										<li
-											className={styles.cart__popup__empty}
-											key={item.id}
-										> {item.price}</li>
+									data.map(item => (
+										<li className={styles.cart__popup__empty} key={item.id}>
+											{' '}
+											{item.price}
+										</li>
 									))
 								) : (
 									<span className={styles.cart__popup__text}>

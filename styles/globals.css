@@ -10,9 +10,7 @@ body {
   font-family: Roboto, sans-serif;
 }
 
-body.dark_mode {
-  background-color: #222;
-}
+
 
 body::-webkit-scrollbar {
   width: 8px;

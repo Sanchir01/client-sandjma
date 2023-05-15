@@ -1,13 +1,13 @@
-import React from 'react'
-import styles from '@/styles/Auth/index.module.scss'
+import EmailInput from '@/components/elements/Auth/EmailInput'
 import NameInput from '@/components/elements/Auth/NameInput'
 import PasswordInput from '@/components/elements/Auth/PasswordInput'
-import EmailInput from '@/components/elements/Auth/EmailInput'
-import { useForm } from 'react-hook-form'
+import { AllAuth } from '@/service/Users.service'
+import styles from '@/styles/Auth/index.module.scss'
+import spinnerStyles from '@/styles/Spinner/index.module.scss'
 import { IInput } from '@/types/Auth.interface'
 import { useMutation } from '@tanstack/react-query'
-import { AllAuth } from '@/service/Users.service'
-import spinnerStyles from '@/styles/Spinner/index.module.scss'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
 	const [spinner, setSpinner] = React.useState(false)
@@ -19,8 +19,9 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
 	} = useForm<IInput>()
 
 	const mutation = useMutation((data: IInput) => AllAuth.CreateUser(data), {
-		onSuccess:() =>{
+		onSuccess: () => {
 			alert('удачная регтсьрация')
+			switchForm()
 		},
 		onError: () => {
 			alert('Такой Email или Nickname уже есть')
@@ -31,13 +32,10 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
 		try {
 			setSpinner(true)
 			mutation.mutate(data)
-			if (mutation.isError) {
-				return null
-			}
+
 			resetField('username')
 			resetField('password')
 			resetField('email')
-			switchForm()
 		} catch (error) {
 			return null
 		} finally {

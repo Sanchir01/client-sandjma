@@ -1,14 +1,41 @@
 import LogoutSVG from '@/components/elements/LogoutSVG.tsx/LogoutSVG'
 import ProfileSVG from '@/components/elements/ProfileSVG/ProfileSVG'
+import { logoutFx } from '@/effector/auth'
+import { AllAuth } from '@/service/Users.service'
+import { IUser } from '@/types/Auth.interface'
 import { IWrappedComponentProps } from '@/types/Common.interface'
 import { withClickOutside } from '@/utils/withClickOutside'
+import { useQuery, } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useRouter } from 'next/router'
 import { forwardRef } from 'react'
 import styles from '../../../styles/ProfileDropDown/indes.module.scss'
 
 const ProfiledropDown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 	({ open, setOpen }, ref) => {
 		const toggleProfileDropDown = () => setOpen(!open)
+
+		
+		
+
+		const { data, isSuccess, } = useQuery<IUser>({
+			queryFn: () => AllAuth.loginCheck(),
+			queryKey: ['logicCheck'],
+			onSuccess:() => AllAuth.loginCheck(),
+			keepPreviousData:true,
+			refetchOnWindowFocus:true
+		})
+
+		const router = useRouter()
+
+		const handleLogout = async () => {
+			await logoutFx(`/users/logout`)
+			return
+		}
+		const loginAuth = () => {
+			router.push(`/auth`)
+		}
+
 		return (
 			<div className={styles.profile} ref={ref}>
 				<button className={styles.profile__btn} onClick={toggleProfileDropDown}>
@@ -25,17 +52,45 @@ const ProfiledropDown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 							className={styles.profile__dropdown}
 							style={{ transformOrigin: 'right top' }}
 						>
-							<li className={styles.profile__dropdown__user}>
-								<span className={styles.profile__dropdown__username}>test</span>
-								<span className={styles.profile__dropdown__email}>
-									test@test.ru
-								</span>
-							</li>
-							<li className={styles.profile__dropdown__item}>
-								<button className={styles.profile__dropdown__item__btn}>
-									<span className={styles.profile__dropdown__item__text}>
-										Выйти
+							{isSuccess && (
+								<li className={styles.profile__dropdown__user}>
+									<span className={styles.profile__dropdown__username}>
+										{data.username}
 									</span>
+									<span className={styles.profile__dropdown__email}>
+										{data.email}
+									</span>
+								</li>
+							)}
+							<li className={styles.profile__dropdown__item}>
+								<button
+									className={styles.profile__dropdown__item__btn}
+									onClick={handleLogout}
+								>
+									{isSuccess && data.username ? (
+										<span className={styles.profile__dropdown__item__text} onClick={handleLogout}>
+											Выйти
+										</span>
+									) : (
+										<span
+											className={styles.profile__dropdown__item__text}
+											onClick={loginAuth}
+										>
+											Войти
+										</span>
+									)}
+									{/* {data.username ? (
+										<span className={styles.profile__dropdown__item__text}>
+											Выйти
+										</span>
+									) : (
+										<span
+											className={styles.profile__dropdown__item__text}
+											onClick={loginAuth}
+										>
+											Войти
+										</span>
+									)} */}
 									<span className={styles.profile__dropdown__item__svg}>
 										<LogoutSVG />
 									</span>

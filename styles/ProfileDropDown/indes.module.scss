@@ -60,9 +60,7 @@
        font-size: 18px;
        color: #2d2d2d;
  
-       &.dark_mode {
-         color: #f2f2f2;
-       }
+      
      }
  
      &__email {
@@ -70,9 +68,7 @@
        font-size: 14px;
        color: #2d2d2d;
  
-       &.dark_mode {
-         color: #e9e9e9;
-       }
+       
      }
  
      &__item {
@@ -99,9 +95,7 @@
            transition: fill .2s ease-in-out;
          }
  
-         &.dark_mode svg {
-           fill: #f2f2f2;
-         }
+        
        }
  
        &:hover &__svg>svg {
@@ -114,9 +108,7 @@
          color: #2d2d2d;
          transition: color .2s ease-in-out;
  
-         &.dark_mode {
-           color: #f2f2f2;
-         }
+        
        }
  
        &:hover &__text {

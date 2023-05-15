@@ -58,17 +58,17 @@ const HeaderTop = () => {
 							<Link
 								onClick={closePopup}
 								className={styles.header__nav__list__item__link}
-								href={`/contacts`}
+								href={`/catalog`}
 								rel=''
 							>
-								123
+								Каталог
 							</Link>
 						</li>
 						<li className={styles.header__nav__list__item}>
 							<Link
 								onClick={closePopup}
 								className={styles.header__nav__list__item__link}
-								href={`/wholesale-bayers`}
+								href={`/wholesale-buyers`}
 								rel=''
 							>
 								Оптовым покупателям

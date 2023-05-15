@@ -45,9 +45,7 @@
          }
        }
  
-       &.dark_mode span {
-         color: #f2f2f2;
-       }
+       
      }
  
      &__right {
@@ -182,18 +180,7 @@
            }
          }
  
-         &.dark_mode {
-           background-color: #4E4C4C;
- 
-           span svg {
-             fill: #f2f2f2;
-           }
- 
-           &:hover {
-             background-color: #2d2d2d;
-             transition: background-color .2s ease-in-out;
-           }
-         }
+        
        }
  
        &__arrow_prev {
@@ -237,9 +224,7 @@
          height: 100%;
        }
  
-       &.dark_mode {
-         background-color: #2d2d2d;
-       }
+       
      }
    }
  
@@ -259,9 +244,7 @@
        display: none;
      }
  
-     &.dark_mode {
-       color: #f2f2f2;
-     }
+   
    }
  
    &__slider {

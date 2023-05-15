@@ -15,3 +15,9 @@ export interface IAuthSignInd {
 	register: UseFormRegister<SignIn>
 	errors: FieldErrors<SignIn>
 }
+
+export interface IUser {
+	username: string
+	userId:number
+	email: string
+}

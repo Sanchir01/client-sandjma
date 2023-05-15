@@ -4,6 +4,13 @@
    background-repeat: no-repeat;
    background-size: cover;
    background-position: center top;
+   @media(max-width:730px){
+      min-height: 90vh;
+   background-image: url('../../public/sanchir//Header-bg.png');
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: left ;
+   }
 }
 .root{
   padding-top: 160px;
@@ -24,6 +31,12 @@
       transition: 0.3s ease-in;
       &:hover{
          color: #E0BEA2
+      }
+      @media(max-width:730px){
+         font-size: 30px;
+         &:hover{
+            display: none;
+         }
       }
    }
    p{

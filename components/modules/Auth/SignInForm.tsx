@@ -1,11 +1,11 @@
-import React from 'react'
-import styles from '@/styles/Auth/index.module.scss'
 import NameInput from '@/components/elements/Auth/NameInput'
 import PasswordInput from '@/components/elements/Auth/PasswordInput'
-import { useForm } from 'react-hook-form'
+import { AllAuth } from '@/service/Users.service'
+import styles from '@/styles/Auth/index.module.scss'
 import { IInput, SignIn } from '@/types/Auth.interface'
 import { useMutation } from '@tanstack/react-query'
-import { AllAuth } from '@/service/Users.service'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 
 import spinnerStyles from '@/styles/Spinner/index.module.scss'
 import { useRouter } from 'next/router'
@@ -19,23 +19,24 @@ const SignInForm = () => {
 		resetField
 	} = useForm<IInput>()
 
-
 	const route = useRouter()
 
 	const mutation = useMutation((data: SignIn) => AllAuth.SignIn(data), {
-       
 		onError: () => {
 			alert('неправильный пароль или никнейм')
+		},
+		onSuccess:() =>{
+			route.push('/')
 		}
 	})
 
- 
 	const onSubmit = async (data: SignIn) => {
 		try {
 			mutation.mutate(data)
+			
 			resetField('username')
 			resetField('password')
-			route.push('/dashboard')
+			
 		} catch (error) {
 			return null
 		} finally {

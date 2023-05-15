@@ -1,4 +1,4 @@
-import SearchInput from '@/components/elements/Header/SearchInput'
+import SearchInput from '@/components/elements/SearchInput/SearchInput'
 import SearchSVG from '@/components/elements/SearchSVG/SearchSVG'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -11,14 +11,14 @@ const HeaderBot: FC = () => {
 		<div className={styles.header__bottom}>
 			<div className={`container ${styles.header__bottom__container}`}>
 				<h1 className={styles.header__logo}>
-					<Link className={styles.header__logo__link} href={`/dashboard`}>
+					<Link className={styles.header__logo__link} href={`/`}>
 						<Image width={32} height={32} src='/img/logo.svg' alt='logo' />
 						<span className={styles.header__logo__link__text}>
 							Одежда - Sandjma
 						</span>
 					</Link>
 				</h1>
-				
+
 				<div className={styles.header__search}>
 					<SearchInput />
 					<button className={styles.header__search__btn}>

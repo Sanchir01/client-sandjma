@@ -20,12 +20,7 @@ $transition: 1.25s;
   border-radius: 12px;
   overflow: hidden;
 
-  &.dark_mode {
-    background-color: #2d2d2d;
-    box-shadow:
-      10px 10px 10px #2d2d2d,
-      -10px -10px 10px $black;
-  }
+  
 }
 
 .container {
@@ -41,9 +36,7 @@ $transition: 1.25s;
   background-color: $neu-1;
   transition: $transition, background-color 0s;
 
-  &.dark_mode {
-    background-color: #2d2d2d;
-  }
+ 
 
   @media (max-width: 430px) {
     padding: 10px;
@@ -118,13 +111,7 @@ $transition: 1.25s;
     }
   }
 
-  &.dark_mode &__input {
-    background-color: #2d2d2d;
-    color: #f2f2f2;
-    box-shadow:
-    inset 2px 2px 4px $black,
-    inset -2px -2px 4px $black;
-  }
+ 
 
   &__span {
     margin-top: 30px;
@@ -147,9 +134,7 @@ $transition: 1.25s;
   margin-bottom: 20px;
   color: $black;
 
-  &.dark_mode {
-    color: #f2f2f2;
-  }
+  
 
   @media (max-width: 430px) {
     font-size: 26px;
@@ -162,9 +147,7 @@ $transition: 1.25s;
   text-align: center;
   line-height: 1.6;
 
-  &.dark_mode {
-    color: #f2f2f2;
-  }
+  
 }
 
 .button {
@@ -187,11 +170,7 @@ $transition: 1.25s;
   border: none;
   outline: none;
 
-  &.dark_mode {
-    box-shadow:
-    8px 8px 16px #2d2d2d,
-    -8px -8px 16px $black;
-  }
+  
 
   @media (max-width: 530px) {
     width: 135px;
@@ -257,12 +236,7 @@ $transition: 1.25s;
     4px 4px 10px $neu-2,
     -4px -4px 10px $white;
 
-  &.dark_mode {
-    background-color: #2d2d2d;
-    box-shadow:
-    8px 8px 16px $black,
-    -8px -8px 16px $black;
-  }
+ 
 
   @media (max-width: 800px) {
     width: 100px;
@@ -287,12 +261,7 @@ $transition: 1.25s;
     left: -60%;
     transition: $transition, background-color 0s;
 
-    &.dark_mode {
-      background-color: #2d2d2d;
-      box-shadow:
-      8px 8px 16px #2d2d2d,
-      -8px -8px 16px $black;
-    }
+    
 
     &__t {
       top: -30%;

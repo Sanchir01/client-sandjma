@@ -5,4 +5,9 @@ export const getWindowWidth = () => {
 	return { windowWidth }
 }
 export const formatPrice = (x: number) =>
-  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+	x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+
+export const createSelectOption = (value: string | number) => ({
+	value,
+	label: value
+})

@@ -1,4 +1,4 @@
-import { IInput,SignIn } from '@/types/Auth.interface'
+import { IInput,IUser,SignIn } from '@/types/Auth.interface'
 import axios from 'axios'
 
 
@@ -14,5 +14,8 @@ export const AllAuth = {
 		return axios.post(`/users/login`,data,{
 			headers:{'Content-Type':'application/json'}
 		})
+	},
+	async loginCheck():Promise<IUser>{
+		return (await axios.get(`/users/login-check`)).data
 	}
 }
