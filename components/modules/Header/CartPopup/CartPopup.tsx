@@ -10,14 +10,18 @@ import { ShoppingCart } from '@/service/Shopping-cart.service'
 import { IShoppingCart } from '@/types/Shopping-car.interface'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import { $user } from '@/effector/user'
+import { useStore } from 'effector-react'
 
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
+
 	({ open, setOpen }, ref) => {
 		const toggleCartDropDown = () => setOpen(!open)
 		const { data, isSuccess } = useQuery<IShoppingCart[]>({
-			queryFn: () => ShoppingCart.getAll(),
+			queryFn: () => ShoppingCart.getAll(user),
 			queryKey: ['shoppingCartAll']
 		})
+		const user = useStore($user)
 		const cartCount = useQuery({
 			queryFn: () => Dashboard.getCartCount,
 			queryKey: ['countCart']

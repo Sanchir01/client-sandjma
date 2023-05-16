@@ -1,3 +1,4 @@
+import CatalogItem from '@/components/modules/Catalog/CatalogItem'
 import ManufacturersBlock from '@/components/modules/Catalog/ManufacturersBlock'
 import SortSelect from '@/components/modules/Catalog/SortSelect'
 import {
@@ -16,12 +17,10 @@ import { toast } from 'react-toastify'
 const CatalogPage: NextPage = () => {
 	const cloth = useStore($clothParts)
 	const [spinner, setSpinner] = useState(false)
-
-  
-
-  useEffect(() =>{
-    loadingBoilerParts()
-  },[])
+	console.log(cloth)
+	useEffect(() => {
+		loadingBoilerParts()
+	}, [])
 
 	const loadingBoilerParts = async () => {
 		try {
@@ -34,20 +33,21 @@ const CatalogPage: NextPage = () => {
 			setSpinner(false)
 		}
 	}
- 
+	
+
 	return (
 		<div className={styles.catalog}>
 			<div className={`container ${styles.catalog__container}`}>
 				<h2 className={styles.catalog__title}>Каталог товаров</h2>
 				<div className={styles.catalog__top}>
 					<AnimatePresence>
-						<ManufacturersBlock title={'Размеры'} />
+						{false &&<ManufacturersBlock title={'Размеры'} />}
 					</AnimatePresence>
 					<AnimatePresence>
-						<ManufacturersBlock title={'Категории'} />
+					{false &&	<ManufacturersBlock title={'Категории'} />}
 					</AnimatePresence>
 					<div className={styles.catalog__top__inner}>
-						<button>Сбросить фильтры</button>
+						<button className={styles.catalog__top__reset} disabled={true}>Сбросить фильтры</button>
 						<SortSelect />
 					</div>
 				</div>
@@ -65,7 +65,7 @@ const CatalogPage: NextPage = () => {
 						) : (
 							<ul className={styles.catalog__list}>
 								{cloth.rows ? (
-									cloth.rows?.map(item => <li key={item.id}></li>)
+									cloth.rows?.map(item => <CatalogItem item={item} key={item.id}/>)
 								) : (
 									<span>список товаров пуст</span>
 								)}

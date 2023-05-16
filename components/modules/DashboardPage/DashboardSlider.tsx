@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import styles from '@/styles/dashboard/index.module.scss'
+import styles from '@/styles/Dashboard/index.module.scss'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
@@ -41,7 +41,7 @@ const BrandsSlider: FC<IDashBoardSlider> = ({
 		variableWidth: true,
 		speed: 500,
 		arrows: false,
-		// slidesToShow: items.length >= 4 ? (isMedia1030 ? 3 : 4) : items.length - 1,
+		slidesToShow: items.length >= 4 ? (isMedia1030 ? 3 : 4) : items.length - 1,
 		slidesToScroll: isMedia768 ? 1 : 2
 	}
 
@@ -51,10 +51,10 @@ const BrandsSlider: FC<IDashBoardSlider> = ({
 	return (
 		<Slider {...settings} className={styles.dashboard__slider}>
 			{spinner ? (
-				[...Array(8)].map(item => (
+				[...Array(8)].map((_,i) => (
 					<div
 						className={skeletonStyles.skeleton__item}
-						key={item}
+						key={i}
 						style={width}
 					>
 						<div className={skeletonStyles.skeleton__item__light} />

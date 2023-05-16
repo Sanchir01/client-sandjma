@@ -79,18 +79,7 @@ const ProfiledropDown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 											Войти
 										</span>
 									)}
-									{/* {data.username ? (
-										<span className={styles.profile__dropdown__item__text}>
-											Выйти
-										</span>
-									) : (
-										<span
-											className={styles.profile__dropdown__item__text}
-											onClick={loginAuth}
-										>
-											Войти
-										</span>
-									)} */}
+									
 									<span className={styles.profile__dropdown__item__svg}>
 										<LogoutSVG />
 									</span>

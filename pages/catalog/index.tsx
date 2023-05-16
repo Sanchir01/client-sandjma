@@ -4,7 +4,7 @@ import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import Head from 'next/head'
 
 function Catalog() {
-	const { shouldLoadContent } = useRedirectByUserCheck(false)
+	const { shouldLoadContent } = useRedirectByUserCheck(true)
 	return (
 		<>
 			<Head>

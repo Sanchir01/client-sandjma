@@ -32,7 +32,7 @@
       &:hover{
          color: #E0BEA2
       }
-      @media(max-width:730px){
+      @media(max-width:830px){
          font-size: 30px;
          &:hover{
             display: none;
@@ -46,6 +46,12 @@
       transition: 0.3s ease-in;
       &:hover{
          color: #E0BEA2
+      }
+      @media(max-width:830px){
+        
+         &:hover{
+            display: none;
+         }
       }
    }
 }
