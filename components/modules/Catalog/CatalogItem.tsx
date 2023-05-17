@@ -12,7 +12,7 @@ const CatalogItem = ({ item }: { item: IClothParts }) => {
 	return (
 		<li className={styles.catalog__list__item}>
 			<Link href={`/catalog/${item.id}`}>
-				<img src={JSON.parse(item.images)[0]} alt={item.name} />
+				<img src={JSON.parse(item.images)[0]} alt={item.name} loading='lazy' />
 			</Link>
 			<div className={styles.catalog__list__item__inner}>
 				<h3 className={styles.catalog__list__item__title}>{item.name}</h3>

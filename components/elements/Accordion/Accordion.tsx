@@ -3,21 +3,35 @@ import { AnimatePresence, motion } from 'framer-motion'
 import * as React from 'react'
 
 const Accordion = ({
-	children,
-	title,
-	titleClass,
-	arrowOpenClass
+  children,
+  title,
+  titleClass,
+  arrowOpenClass,
+  isMobileForFilters,
+  hideArrowClass,
 }: IAccordion) => {
 	const [expanded, setExpanded] = React.useState(false)
 	const toggleAccordion = () => setExpanded(!expanded)
 
 	return (
 		<>
-			<motion.button initial={false} onClick={toggleAccordion} className={`${titleClass} ${expanded ? arrowOpenClass : ''}`}>
-            {title}
-         </motion.button>
+			{title ? (
+				isMobileForFilters ? (
+					<button className={`${titleClass} ${hideArrowClass}`}>{title}</button>
+				) : (
+					<motion.button
+						initial={false}
+						onClick={toggleAccordion}
+						className={`${titleClass} ${expanded ? isMobileForFilters ? '': arrowOpenClass: ''}`}
+					>
+						{title}
+					</motion.button>
+				)
+			) : (
+				''
+			)}
 			<AnimatePresence initial={false}>
-				{expanded && (
+				{(isMobileForFilters || expanded) && (
 					<motion.section
 						key='content'
 						initial='collapsed'
