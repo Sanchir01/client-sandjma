@@ -1,5 +1,5 @@
 import { ICheckboxItem } from '@/types/Catalog.interface'
-import { IClothPartsRows } from '@/types/ClotshParts.interface'
+import { IClothParts, IClothPartsRows } from '@/types/ClotshParts.interface'
 import { clothManufacturers, clothSize } from '@/utils/Catalog'
 import axios from 'axios'
 import { createDomain, createEffect } from 'effector-next'
@@ -25,6 +25,8 @@ export const setClothPartsByPopularity = clothParts.createEvent()
 
 export const setClothManufacturers = clothParts.createEvent<ICheckboxItem[]>()
 export const updateClothManufacturers = clothParts.createEvent<ICheckboxItem>()
+
+export const setFilteredCloth = clothParts.createEvent()
 
 export const setSizeManufacturers = clothParts.createEvent<ICheckboxItem[]>()
 export const updateSizeManufacturers = clothParts.createEvent<ICheckboxItem>()
@@ -77,3 +79,7 @@ export const $clothSizeManufacturers = clothParts
 			checked: payload.checked
 		})
 	])
+
+export const $filteredCloth = clothParts
+	.createStore<IClothPartsRows>({} as IClothPartsRows)
+	.on(setFilteredCloth, (_, parts) => parts)

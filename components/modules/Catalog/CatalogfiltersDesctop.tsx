@@ -9,18 +9,21 @@ import {
 } from '@/effector/clothParts'
 import styles from '@/styles/Catalog/index.module.scss'
 import spinnerStyles from '@/styles/Spinner/index.module.scss'
-import { ICatalogFilterDesktopProps } from '@/types/Catalog.interface'
+
 import { useStore } from 'effector-react'
 import FilterManufacturerAccordion from './FilterManufacturerAccordion'
 import PriceRange from './PriceRange'
+import { ICatalogFilterDektopProps } from '@/types/Catalog.interface'
 
 const CatalogFiltersDesktop = ({
 	setIsPriceRangeChanged,
 	priceRange,
 	setPriceRange,
 	resetFilterBTNDisabled,
-	spinner
-}: ICatalogFilterDesktopProps) => {
+	spinner,
+	resetFilter,
+	applyFilters
+}: ICatalogFilterDektopProps) => {
 	const clothManufacturers = useStore($clothManufacturers)
 	const slothSize = useStore($clothSizeManufacturers)
 
@@ -35,13 +38,13 @@ const CatalogFiltersDesktop = ({
 					setManufacturer={setClothManufacturers}
 				/>
 			</div>
-			<div className={styles.filter__price}>
+			<div className={styles.filters__price}>
 				<Accordion
 					title={'Цена'}
-					titleClass={styles.filter__manufacturer__btn}
+					titleClass={styles.filters__manufacturer__btn}
 					arrowOpenClass={styles.open}
 				>
-					<div className={styles.filter__manufacturer__inner}>
+					<div className={styles.filters__manufacturer__inner}>
 						<PriceRange
 							priceRange={priceRange}
 							setPriceRange={setPriceRange}
@@ -60,13 +63,15 @@ const CatalogFiltersDesktop = ({
 			</div>
 			<div className={styles.filters__actions}>
 				<button
-					className={styles.filter__actions__show}
+					className={styles.filters__actions__show}
 					disabled={spinner || resetFilterBTNDisabled}
+					onClick={applyFilters }
 				>
 					{spinner ? (
 						<span
 							className={spinnerStyles.spinner}
 							style={{ top: 6, left: '47%' }}
+							
 						/>
 					) : (
 						<span>Показать</span>
@@ -75,6 +80,7 @@ const CatalogFiltersDesktop = ({
 				<button
 					className={styles.filters__actions__reset}
 					disabled={resetFilterBTNDisabled}
+					onClick={resetFilter}
 				>
 					Сбросить
 				</button>

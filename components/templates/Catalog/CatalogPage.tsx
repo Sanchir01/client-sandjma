@@ -7,8 +7,13 @@ import {
 	$clothManufacturers,
 	$clothParts,
 	$clothSizeManufacturers,
+	$filteredCloth,
 	getBoilerPartsFx,
-	setClothParts
+	setClothManufacturers,
+	setClothParts,
+	setSizeManufacturers,
+	updateClothManufacturers,
+	updateSizeManufacturers
 } from '@/effector/clothParts'
 import styles from '@/styles/Catalog/index.module.scss'
 import skeletonStyles from '@/styles/Skeleton/index.module.scss'
@@ -25,9 +30,11 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 	const cloth = useStore($clothParts)
 	const clothManufacturers = useStore($clothManufacturers)
 	const slothSize = useStore($clothSizeManufacturers)
+	const filteredCloth = useStore($filteredCloth)
 
 	const [spinner, setSpinner] = useState(false)
 	const [priceRange, setPriceRange] = useState([1, 1000])
+	const [isFilterInQuery, setIsFilterInQuery] = useState(false)
 	const [isPriceRangeChanged, setIsPriceRangeChanged] = useState(false)
 
 	const pageCount = Math.ceil(cloth.count / 20)
@@ -36,10 +43,11 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 		item => item.checked
 	)
 	const isAnySizeManufacturerChecked = slothSize.some(item => item.checked)
-	const resetFilterBTNDisabled =
-		!isPriceRangeChanged ||
+	const resetFilterBTNDisabled = !(
+		isPriceRangeChanged ||
 		isAnyClothManufacturerChecked ||
 		isAnySizeManufacturerChecked
+	)
 
 	const isValidOffset =
 		query.offset && !isNaN(+query.offset) && +query.offset > 0
@@ -52,7 +60,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 
 	useEffect(() => {
 		loadingBoilerParts()
-	}, [])
+	}, [filteredCloth, isFilterInQuery])
 
 	const resetPagination = (data: IClothPartsRows) => {
 		setCurrentPager(0)
@@ -85,17 +93,18 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 						{ shallow: true }
 					)
 					setCurrentPager(0)
-					setClothParts(data)
-					return
+					setClothParts(isFilterInQuery ? filteredCloth : data)
 				}
+				const offset = +query.offset - 1
+				const result = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${offset}`
+				)
+				setCurrentPager(offset)
+				setClothParts(isFilterInQuery ? filteredCloth : result)
+				return
 			}
-
-			const offset = +query.offset - 1
-			const result = await getBoilerPartsFx(
-				`/boiler-parts?limit=12&offset=${offset}`
-			)
-			setCurrentPager(offset)
-			setClothParts(result)
+			setCurrentPager(0)
+			setClothParts(isFilterInQuery ? filteredCloth : data)
 		} catch (error) {
 			toast.error((error as Error).message)
 		} finally {
@@ -132,22 +141,52 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 			setClothParts(result)
 		} catch (error) {}
 	}
-	console.log(cloth.rows, query.offset, cloth.count)
+
+	const resetFilter = async () => {
+		try {
+			const data = await getBoilerPartsFx(`/boiler-parts?limit=20&offset=0`)
+			setClothManufacturers(
+				clothManufacturers.map(item => ({ ...item, checked: false }))
+			),
+				setSizeManufacturers(
+					clothManufacturers.map(item => ({ ...item, checked: false }))
+				)
+			setClothParts(data)
+			setPriceRange([0, 10000])
+			setIsPriceRangeChanged(false)
+		} catch (error) {
+			toast.error((error as Error).message)
+		}
+	}
+
 	return (
 		<div className={styles.catalog}>
 			<div className={`container ${styles.catalog__container}`}>
 				<h2 className={styles.catalog__title}>Каталог товаров</h2>
 				<div className={styles.catalog__top}>
 					<AnimatePresence>
-						{false && <ManufacturersBlock title={'Размеры'} />}
+						{isAnyClothManufacturerChecked && (
+							<ManufacturersBlock
+								title={'Размеры'}
+								event={updateClothManufacturers}
+								manufacturerList={clothManufacturers}
+							/>
+						)}
 					</AnimatePresence>
 					<AnimatePresence>
-						{false && <ManufacturersBlock title={'Категории'} />}
+						{isAnySizeManufacturerChecked && (
+							<ManufacturersBlock
+								title={'Категории'}
+								event={updateSizeManufacturers}
+								manufacturerList={slothSize}
+							/>
+						)}
 					</AnimatePresence>
 					<div className={styles.catalog__top__inner}>
 						<button
 							className={styles.catalog__top__reset}
 							disabled={resetFilterBTNDisabled}
+							onClick={resetFilter}
 						>
 							Сбросить фильтры
 						</button>
@@ -161,7 +200,10 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 							setPriceRange={setPriceRange}
 							setIsPriceRangeChanged={setIsPriceRangeChanged}
 							resetFilterBTNDisabled={resetFilterBTNDisabled}
-							spinner={spinner}
+							currentPage={currentPage}
+							resetFilter={resetFilter}
+							isPriceRangeChanged={isPriceRangeChanged}
+							setIsFilterInQuery={setIsFilterInQuery}
 						/>
 						{spinner ? (
 							<ul className={skeletonStyles.skeleton}>

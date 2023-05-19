@@ -6,6 +6,6 @@ const createManufacturerCheckboxObj = (title: string) => ({
 	id: idGenerator()
 })
 
-export const clothManufacturers = ['худи', 'толстовки', 'свитшоты'].map(createManufacturerCheckboxObj)
+export const clothManufacturers = ['Худи', 'Толстовки', 'Свитшоты'].map(createManufacturerCheckboxObj)
 
 export const clothSize = ['XL', 'S', 'M'].map(createManufacturerCheckboxObj)

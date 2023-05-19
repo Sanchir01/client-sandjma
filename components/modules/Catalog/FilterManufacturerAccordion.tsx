@@ -24,18 +24,19 @@ const FilterManufacturerAccordion = ({
 	return (
 		<Accordion
 			title={title}
-			titleClass={styles.filter__manufacturer__btn}
+			titleClass={styles.filters__manufacturer__btn}
 			arrowOpenClass={styles.open}
 			isMobileForFilters={isMobile}
 			hideArrowClass={isMobile ? styles.hide_arrow : ''}
 		>
-			<div className={styles.filter__manufacturer__inner}>
-				<button className={styles.filter__manufacturer__select__all} onClick={chooseAllManufacturers}> 
+			<div className={styles.filters__manufacturer__inner}>
+				<button className={styles.filters__manufacturer__select_all}onClick={chooseAllManufacturers}> 
 					Выбрать все
 				</button>
-				<ul className={styles.filter__manufacturer__list}>
+				<ul className={styles.filters__manufacturer__list}>
 					{manufacturerList.map(item => (
 						<FilterCheckboxItem
+						id={item.id}
 							title={item.title}
 							key={item.id}
 							checked={item.checked}

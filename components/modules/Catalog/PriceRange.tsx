@@ -1,7 +1,7 @@
 
 import { useStore } from 'effector-react'
 import { Range, getTrackBackground } from 'react-range'
-import styles from '@/styles/catalog/index.module.scss'
+import styles from '@/styles/Catalog/index.module.scss'
 import { IPriceRangeProps } from '@/types/Catalog.interface'
 
 

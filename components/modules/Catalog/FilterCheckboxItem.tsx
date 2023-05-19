@@ -4,9 +4,9 @@ import { ICheckboxItem } from '@/types/Catalog.interface'
 const FilterCheckboxItem = ({ title, id, checked,event }: ICheckboxItem) => {
    const handleFilter =() =>event({checked:!checked,id} as ICheckboxItem)
 	return (
-		<li className={styles.filter__manufacturer__list__item}>
+		<li className={styles.filters__manufacturer__list__item}>
 			<label>
-            <input type="checked"  checked={checked} onChange={handleFilter}/>
+            <input type="checkbox"  checked={checked} onChange={handleFilter}/>
 				<span>{title}</span>
 			</label>
 		</li>
