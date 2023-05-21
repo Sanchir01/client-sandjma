@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
 	$clothManufacturers,
 	$clothSizeManufacturers,
@@ -6,9 +7,10 @@ import {
 } from '@/effector/clothParts'
 import { useMediaQuery } from '@/hooks/useMediaquery'
 import { ICatalogFilterProps } from '@/types/Catalog.interface'
+import { getQueryParamOnFirstRender } from '@/utils/common'
 import { useStore } from 'effector-react'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import CatalogFiltersDesktop from './CatalogfiltersDesctop'
 
@@ -29,7 +31,37 @@ const CatalogFilters = ({
 	const clothManufacturers = useStore($clothManufacturers)
 	const slothSize = useStore($clothSizeManufacturers)
 
-	const applyFil
+	useEffect(() => {
+		applyFilterFromQuery()
+	}, [])
+
+	const applyFilterFromQuery = async () => {
+		try {
+			const priceFromQueryValue = getQueryParamOnFirstRender(
+				'priceFrom',
+				router
+			)
+			const priceToQueryValue = getQueryParamOnFirstRender('priceTo', router)
+			const clothAQueryValue = JSON.parse(
+				decodeURIComponent(
+					getQueryParamOnFirstRender('cloth', router) as string
+				)
+			)
+			const sizeQueryValue = JSON.parse(
+				decodeURIComponent(getQueryParamOnFirstRender('size', router) as string)
+			)
+			const isValidClothQuery =
+				Array.isArray(clothAQueryValue) && !!clothAQueryValue?.length
+			const isValidSizeQuery =
+				Array.isArray(sizeQueryValue) && !!sizeQueryValue?.length
+
+			const clothQuery = `&cloth=${getQueryParamOnFirstRender('cloth', router)}`
+			const sizeQuery = `&size=${getQueryParamOnFirstRender('size', router)}`
+			const priceQuery = `&priceFrom=${priceFromQueryValue}&priceTo=${priceToQueryValue}`
+			if()
+		} catch (err) {}
+	}
+
 
 	const applyFilters = async () => {
 		setIsFilterInQuery(true)
@@ -53,6 +85,10 @@ const CatalogFilters = ({
 			const initialPage = currentPage > 0 ? 0 : currentPage
 
 			if (clothes.length && size.length && isPriceRangeChanged) {
+				delete router.query.cloth
+				delete router.query.size
+				delete router.query.priceTo
+				delete router.query.piceFrom
 				router.push(
 					{
 						query: {
@@ -74,12 +110,17 @@ const CatalogFilters = ({
 				return
 			}
 			if (clothes.length && size.length) {
+				delete router.query.cloth
+				delete router.query.size
+				delete router.query.priceTo
+				delete router.query.piceFrom
 				router.push(
 					{
 						query: {
 							...router.query,
 							cloth: encodedClothQuery,
 							size: encodedSizeQuery,
+
 							offset: initialPage + 1
 						}
 					},
@@ -94,6 +135,10 @@ const CatalogFilters = ({
 			}
 
 			if (size.length && isPriceRangeChanged) {
+				delete router.query.cloth
+				delete router.query.size
+				delete router.query.priceTo
+				delete router.query.piceFrom
 				router.push(
 					{
 						query: {
@@ -115,6 +160,10 @@ const CatalogFilters = ({
 			}
 
 			if (clothes.length && isPriceRangeChanged) {
+				delete router.query.cloth
+				delete router.query.size
+				delete router.query.priceTo
+				delete router.query.piceFrom
 				router.push(
 					{
 						query: {
@@ -136,6 +185,10 @@ const CatalogFilters = ({
 			}
 
 			if (clothes.length) {
+				delete router.query.cloth
+				delete router.query.size
+				delete router.query.priceTo
+				delete router.query.piceFrom
 				router.push(
 					{
 						query: {
@@ -155,6 +208,10 @@ const CatalogFilters = ({
 			}
 
 			if (size.length) {
+				delete router.query.cloth
+				delete router.query.size
+				delete router.query.priceTo
+				delete router.query.piceFrom
 				router.push(
 					{
 						query: {
@@ -173,6 +230,10 @@ const CatalogFilters = ({
 				return
 			}
 			if (isPriceRangeChanged) {
+				delete router.query.cloth
+				delete router.query.size
+				delete router.query.priceTo
+				delete router.query.piceFrom
 				router.push(
 					{
 						query: {

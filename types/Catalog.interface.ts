@@ -56,5 +56,4 @@ export interface ICatalogFilterDektopProps  {
 	resetFilter: VoidFunction
 	isPriceRangeChanged: boolean
 	applyFilters:VoidFunction
-	
 }
