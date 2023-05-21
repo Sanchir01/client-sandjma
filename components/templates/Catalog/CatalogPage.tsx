@@ -152,7 +152,10 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 			setCurrentPager(selected)
 			setClothParts(result)
 			window.scrollTo(0, 200)
-		} catch (error) {}
+		} catch (error) {
+		} finally {
+			setTimeout(() => setSpinner(false), 500)
+		}
 	}
 
 	const resetFilter = async () => {
@@ -165,7 +168,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 			delete params.priceTo
 			params.first = 'cheap'
 
-			router.push({query:{ ...params }}, undefined, { shallow: true })
+			router.push({ query: { ...params } }, undefined, { shallow: true })
 			setClothManufacturers(
 				clothManufacturers.map(item => ({ ...item, checked: false }))
 			),
@@ -177,6 +180,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 			setIsPriceRangeChanged(false)
 		} catch (error) {
 			toast.error((error as Error).message)
+		} finally {
+			setTimeout(() => setSpinner(false), 400)
 		}
 	}
 
@@ -211,7 +216,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 						>
 							Сбросить фильтры
 						</button>
-						<SortSelect />
+						<SortSelect  setSpinner={setSpinner}/>
 					</div>
 				</div>
 				<div className={styles.catalog__bottom}>
@@ -228,7 +233,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 						/>
 						{spinner ? (
 							<ul className={skeletonStyles.skeleton}>
-								{Array.from(new Array(8)).map((_, i) => (
+								{Array.from(new Array(20)).map((_, i) => (
 									<li key={i} className={skeletonStyles.skeleton__item}>
 										<div className={skeletonStyles.skeleton__item__light} />
 									</li>

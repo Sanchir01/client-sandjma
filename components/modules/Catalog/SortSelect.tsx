@@ -19,7 +19,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import Select from 'react-select'
 
-const SortSelect = () => {
+const SortSelect = ({ setSpinner }: { setSpinner: (arg: boolean) => void }) => {
 	const [sortOption, setSortOption] = React.useState<SelectOptionType>(null)
 	const cloth = useStore($clothParts)
 	const router = useRouter()
@@ -35,7 +35,7 @@ const SortSelect = () => {
 			undefined,
 			{ shallow: true }
 		)
-	
+
 	useEffect(() => {
 		if (cloth.rows) {
 			switch (router.query.first) {
@@ -59,11 +59,12 @@ const SortSelect = () => {
 					break
 			}
 		}
-	},[])
+	}, [])
 	const updateCategoryOption = (value: string) =>
 		setSortOption({ value, label: value })
 
 	const handleSortOptionChange = (selectOption: SelectOptionType) => {
+		setSpinner(true)
 		setSortOption(selectOption)
 
 		switch ((selectOption as IOption).value) {
@@ -80,6 +81,7 @@ const SortSelect = () => {
 				updateRoteParam('popular')
 				break
 		}
+		setTimeout(() => setSpinner(false), 400)
 	}
 	return (
 		<Select

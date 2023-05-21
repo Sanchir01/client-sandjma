@@ -29,6 +29,8 @@ const CatalogFilters = ({
 	const clothManufacturers = useStore($clothManufacturers)
 	const slothSize = useStore($clothSizeManufacturers)
 
+	const applyFil
+
 	const applyFilters = async () => {
 		setIsFilterInQuery(true)
 		try {
