@@ -30,13 +30,16 @@ const FilterManufacturerAccordion = ({
 			hideArrowClass={isMobile ? styles.hide_arrow : ''}
 		>
 			<div className={styles.filters__manufacturer__inner}>
-				<button className={styles.filters__manufacturer__select_all}onClick={chooseAllManufacturers}> 
+				<button
+					className={styles.filters__manufacturer__select_all}
+					onClick={chooseAllManufacturers}
+				>
 					Выбрать все
 				</button>
 				<ul className={styles.filters__manufacturer__list}>
 					{manufacturerList.map(item => (
 						<FilterCheckboxItem
-						id={item.id}
+							id={item.id}
 							title={item.title}
 							key={item.id}
 							checked={item.checked}
@@ -44,7 +47,7 @@ const FilterManufacturerAccordion = ({
 						/>
 					))}
 				</ul>
-            <div style={{height:24}}/>
+				<div style={{ height: 24 }} />
 			</div>
 		</Accordion>
 	)

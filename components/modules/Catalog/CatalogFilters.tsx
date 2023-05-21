@@ -71,25 +71,6 @@ const CatalogFilters = ({
 				setFilteredCloth(data)
 				return
 			}
-			if (isPriceRangeChanged) {
-				router.push(
-					{
-						query: {
-							...router.query,
-							priceFrom,
-							priceTo,
-							offset: initialPage + 1
-						}
-					},
-					undefined,
-					{ shallow: true }
-				)
-				const data = await getBoilerPartsFx(
-					`/boiler-parts?limit=20&offset=${initialPage}${priceQuery}`
-				)
-				setFilteredCloth(data)
-				return
-			}
 			if (clothes.length && size.length) {
 				router.push(
 					{
@@ -109,6 +90,49 @@ const CatalogFilters = ({
 				setFilteredCloth(data)
 				return
 			}
+
+			if (size.length && isPriceRangeChanged) {
+				router.push(
+					{
+						query: {
+							...router.query,
+							size: encodedSizeQuery,
+							priceFrom,
+							priceTo,
+							offset: initialPage + 1
+						}
+					},
+					undefined,
+					{ shallow: true }
+				)
+				const data = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${initialPage}${priceQuery}${sizeQuery}`
+				)
+				setFilteredCloth(data)
+				return
+			}
+
+			if (clothes.length && isPriceRangeChanged) {
+				router.push(
+					{
+						query: {
+							...router.query,
+							cloth: encodedClothQuery,
+							priceFrom,
+							priceTo,
+							offset: initialPage + 1
+						}
+					},
+					undefined,
+					{ shallow: true }
+				)
+				const data = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${initialPage}${priceQuery}${clothQuery}`
+				)
+				setFilteredCloth(data)
+				return
+			}
+
 			if (clothes.length) {
 				router.push(
 					{
@@ -125,7 +149,9 @@ const CatalogFilters = ({
 					`/boiler-parts?limit=20&offset=${initialPage}${clothQuery}`
 				)
 				setFilteredCloth(data)
+				return
 			}
+
 			if (size.length) {
 				router.push(
 					{
@@ -144,12 +170,12 @@ const CatalogFilters = ({
 				setFilteredCloth(data)
 				return
 			}
-			if (size.length && isPriceRangeChanged) {
+			if (isPriceRangeChanged) {
 				router.push(
 					{
 						query: {
 							...router.query,
-							size: encodedSizeQuery,
+
 							priceFrom,
 							priceTo,
 							offset: initialPage + 1
@@ -159,27 +185,7 @@ const CatalogFilters = ({
 					{ shallow: true }
 				)
 				const data = await getBoilerPartsFx(
-					`/boiler-parts?limit=20&offset=${initialPage}${sizeQuery}${isPriceRangeChanged}`
-				)
-				setFilteredCloth(data)
-				return
-			}
-			if (clothes.length && isPriceRangeChanged) {
-				router.push(
-					{
-						query: {
-							...router.query,
-							cloth: encodedClothQuery,
-							priceFrom,
-							priceTo,
-							offset: initialPage + 1
-						}
-					},
-					undefined,
-					{ shallow: true }
-				)
-				const data = await getBoilerPartsFx(
-					`/boiler-parts?limit=20&offset=${initialPage}${clothQuery}${isPriceRangeChanged}`
+					`/boiler-parts?limit=20&offset=${initialPage}${priceQuery}`
 				)
 				setFilteredCloth(data)
 				return

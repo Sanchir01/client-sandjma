@@ -19,6 +19,7 @@ import styles from '@/styles/Catalog/index.module.scss'
 import skeletonStyles from '@/styles/Skeleton/index.module.scss'
 import { IQueryParams } from '@/types/Catalog.interface'
 import { IClothPartsRows } from '@/types/ClotshParts.interface'
+import { clothSize } from '@/utils/Catalog'
 import { useStore } from 'effector-react'
 import { AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/router'
@@ -148,9 +149,9 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 			setClothManufacturers(
 				clothManufacturers.map(item => ({ ...item, checked: false }))
 			),
-				setSizeManufacturers(
-					clothManufacturers.map(item => ({ ...item, checked: false }))
-				)
+			setSizeManufacturers(
+				slothSize.map(item =>({...item,checked: false}))
+			)
 			setClothParts(data)
 			setPriceRange([0, 10000])
 			setIsPriceRangeChanged(false)
