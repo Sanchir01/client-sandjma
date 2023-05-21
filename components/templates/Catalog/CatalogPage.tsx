@@ -19,7 +19,6 @@ import styles from '@/styles/Catalog/index.module.scss'
 import skeletonStyles from '@/styles/Skeleton/index.module.scss'
 import { IQueryParams } from '@/types/Catalog.interface'
 import { IClothPartsRows } from '@/types/ClotshParts.interface'
-import { clothSize } from '@/utils/Catalog'
 import { useStore } from 'effector-react'
 import { AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/router'
@@ -118,15 +117,27 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 			const data = await getBoilerPartsFx(`/boiler-parts?limit=20&offset=0`)
 
 			if (selected > pageCount) {
-				resetPagination(data)
+				resetPagination(isFilterInQuery ? filteredCloth : data)
 				return
 			}
 			if (isValidOffset && +query.offset > Math.ceil(data.count / 2)) {
-				resetPagination(data)
+				resetPagination(isFilterInQuery ? filteredCloth : data)
 				return
 			}
 			const result = await getBoilerPartsFx(
-				`/boiler-parts?limit=20&offset=${selected}`
+				`/boiler-parts?limit=20&offset=${selected}${
+					isFilterInQuery && router.query.cloth
+						? `&cloth=${router.query.cloth}`
+						: ''
+				}${
+					isFilterInQuery && router.query.size
+						? `&size=${router.query.size}`
+						: ''
+				}${
+					isFilterInQuery && router.query.priceFrom && router.query.priceTo
+						? `&priceFrom=${router.query.priceFrom}&priceTo=${router.query.priceTo}`
+						: ''
+				}`
 			)
 			router.push(
 				{
@@ -140,18 +151,27 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 			)
 			setCurrentPager(selected)
 			setClothParts(result)
+			window.scrollTo(0, 200)
 		} catch (error) {}
 	}
 
 	const resetFilter = async () => {
 		try {
 			const data = await getBoilerPartsFx(`/boiler-parts?limit=20&offset=0`)
+			const params = router.query
+			delete params.cloth
+			delete params.size
+			delete params.priceFrom
+			delete params.priceTo
+			params.first = 'cheap'
+
+			router.push({query:{ ...params }}, undefined, { shallow: true })
 			setClothManufacturers(
 				clothManufacturers.map(item => ({ ...item, checked: false }))
 			),
-			setSizeManufacturers(
-				slothSize.map(item =>({...item,checked: false}))
-			)
+				setSizeManufacturers(
+					slothSize.map(item => ({ ...item, checked: false }))
+				)
 			setClothParts(data)
 			setPriceRange([0, 10000])
 			setIsPriceRangeChanged(false)
