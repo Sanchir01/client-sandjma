@@ -7,38 +7,44 @@ import { forwardRef } from 'react'
 import ShoppingCartSVG from '@/components/elements/ShoppingCartSVG/ShoppingCartSVG'
 import { Dashboard } from '@/service/Dashboard.service'
 import { ShoppingCart } from '@/service/Shopping-cart.service'
+import { AllAuth } from '@/service/Users.service'
+import { IUser } from '@/types/Auth.interface'
 import { IShoppingCart } from '@/types/Shopping-car.interface'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
-import { $user } from '@/effector/user'
-import { useStore } from 'effector-react'
+import CartPopupItem from './CartPopupItem'
 
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
-
 	({ open, setOpen }, ref) => {
 		const toggleCartDropDown = () => setOpen(!open)
-		const { data, isSuccess } = useQuery<IShoppingCart[]>({
-			queryFn: () => ShoppingCart.getAll(user),
-			queryKey: ['shoppingCartAll']
+
+		const { data: id } = useQuery<IUser>({
+			queryFn: () => AllAuth.loginCheck(),
+			queryKey: ['logicCheckID'],
+			onSuccess: id => ShoppingCart.getAll(id)
 		})
-		const user = useStore($user)
-		const cartCount = useQuery({
+		const { data, isSuccess } = useQuery<IShoppingCart[]>({
+			queryKey: ['shoppingCartAll', id],
+			enabled: !!id,
+			queryFn: () => ShoppingCart.getAll(id!),
+			keepPreviousData: true,
+			refetchInterval: 1000
+		})
+		const { data: cartCount, isSuccess: ok } = useQuery({
 			queryFn: () => Dashboard.getCartCount,
 			queryKey: ['countCart']
 		})
-		console.log(data)
+
 		return (
 			<div className={styles.cart} ref={ref}>
 				<button className={styles.cart__btn} onClick={toggleCartDropDown}>
-					{isSuccess && cartCount.data?.length && (
-						<span className={styles.cart__btn__count}>
-							{cartCount.data.length}
-						</span>
+					{isSuccess && (
+						<span className={styles.cart__btn__count}>{data.length}</span>
 					)}
 					<span className={styles.cart__svg}>
 						<ShoppingCartSVG />
 					</span>
-					<span className={styles.cart__text}>Корзина</span>
+					<span className={styles.cart__text}></span>
 				</button>
 				<AnimatePresence>
 					{open && (
@@ -51,17 +57,10 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 						>
 							<h3 className={styles.cart__popup__title}>Корзина</h3>
 							<ul className={styles.cart__popup__list}>
-								{isSuccess ? (
-									data.map(item => (
-										<li className={styles.cart__popup__empty} key={item.id}>
-											{' '}
-											{item.price}
-										</li>
-									))
+								{isSuccess && data.length ? (
+									data.map(item => <CartPopupItem key={item.id} item={item} />)
 								) : (
-									<span className={styles.cart__popup__text}>
-										корзина пуста
-									</span>
+									<span className={styles.cart__popup__empty__text}>пусто</span>
 								)}
 							</ul>
 							<div className={styles.cart__popup__footer}>

@@ -18,6 +18,6 @@ export interface IAuthSignInd {
 
 export interface IUser {
 	username: string
-	userId:number
-	email: string
+	userId: number 
+	email?: string
 }

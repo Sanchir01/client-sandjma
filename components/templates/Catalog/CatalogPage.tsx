@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import FilterSVG from '@/components/elements/FilterSVG/FilterSVG'
 import CatalogFilters from '@/components/modules/Catalog/CatalogFilters'
 import CatalogItem from '@/components/modules/Catalog/CatalogItem'
 import ManufacturersBlock from '@/components/modules/Catalog/ManufacturersBlock'
@@ -15,10 +16,12 @@ import {
 	updateClothManufacturers,
 	updateSizeManufacturers
 } from '@/effector/clothParts'
+import { usePopup } from '@/hooks/usePopap'
 import styles from '@/styles/Catalog/index.module.scss'
 import skeletonStyles from '@/styles/Skeleton/index.module.scss'
 import { IQueryParams } from '@/types/Catalog.interface'
 import { IClothPartsRows } from '@/types/ClotshParts.interface'
+import { CheckQueryParams } from '@/utils/Catalog'
 import { useStore } from 'effector-react'
 import { AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/router'
@@ -36,6 +39,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 	const [priceRange, setPriceRange] = useState([1, 1000])
 	const [isFilterInQuery, setIsFilterInQuery] = useState(false)
 	const [isPriceRangeChanged, setIsPriceRangeChanged] = useState(false)
+
+	const { closePopup, open, toggleOpen } = usePopup()
 
 	const pageCount = Math.ceil(cloth.count / 20)
 
@@ -124,17 +129,19 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 				resetPagination(isFilterInQuery ? filteredCloth : data)
 				return
 			}
+			const { isValidClothQuery, isValidSizeQuery, isValidPriceQuery } =
+				CheckQueryParams(router)
 			const result = await getBoilerPartsFx(
 				`/boiler-parts?limit=20&offset=${selected}${
-					isFilterInQuery && router.query.cloth
+					isFilterInQuery && isValidClothQuery
 						? `&cloth=${router.query.cloth}`
 						: ''
 				}${
-					isFilterInQuery && router.query.size
+					isFilterInQuery && isValidSizeQuery
 						? `&size=${router.query.size}`
 						: ''
 				}${
-					isFilterInQuery && router.query.priceFrom && router.query.priceTo
+					isFilterInQuery && isValidPriceQuery
 						? `&priceFrom=${router.query.priceFrom}&priceTo=${router.query.priceTo}`
 						: ''
 				}`
@@ -216,7 +223,16 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 						>
 							Сбросить фильтры
 						</button>
-						<SortSelect  setSpinner={setSpinner}/>
+						<button
+							className={styles.catalog__top__mobile_btn}
+							onClick={toggleOpen}
+						>
+							<span className={styles.catalog__top__mobile_btn__svg}>
+								<FilterSVG />
+							</span>
+							<span  className={styles.catalog__top__mobile_btn__text}>Фильтры</span>
+						</button>
+						<SortSelect setSpinner={setSpinner} />
 					</div>
 				</div>
 				<div className={styles.catalog__bottom}>
@@ -230,6 +246,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 							resetFilter={resetFilter}
 							isPriceRangeChanged={isPriceRangeChanged}
 							setIsFilterInQuery={setIsFilterInQuery}
+							closePopup={closePopup}
+							filtersMobileOpen={open}
 						/>
 						{spinner ? (
 							<ul className={skeletonStyles.skeleton}>

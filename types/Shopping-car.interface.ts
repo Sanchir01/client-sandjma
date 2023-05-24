@@ -1,8 +1,8 @@
 export interface IShoppingCart {
 	data: any
-	id: number
+	id: number | string
 	name: string
-	price: string
+	price: number
 	images: string
 	in_stock: number
 	cloth_manufacturer: string
@@ -15,4 +15,10 @@ export interface IShoppingCart {
 export interface IRows {
 	count: number
 	rows: IShoppingCart[]
+}
+
+export interface IAddToCartFx{
+	url: string
+	username:string
+	partId:number
 }

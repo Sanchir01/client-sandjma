@@ -10,10 +10,10 @@ import {
 import styles from '@/styles/Catalog/index.module.scss'
 import spinnerStyles from '@/styles/Spinner/index.module.scss'
 
+import { ICatalogFilterDektopProps } from '@/types/Catalog.interface'
 import { useStore } from 'effector-react'
 import FilterManufacturerAccordion from './FilterManufacturerAccordion'
 import PriceRange from './PriceRange'
-import { ICatalogFilterDektopProps } from '@/types/Catalog.interface'
 
 const CatalogFiltersDesktop = ({
 	setIsPriceRangeChanged,
@@ -49,6 +49,8 @@ const CatalogFiltersDesktop = ({
 							priceRange={priceRange}
 							setPriceRange={setPriceRange}
 							setIsPriceRangeChanged={setIsPriceRangeChanged}
+							resetFilterBTNDisabled={false}
+							resetFilter={resetFilter}
 						/>
 					</div>
 				</Accordion>
@@ -65,13 +67,12 @@ const CatalogFiltersDesktop = ({
 				<button
 					className={styles.filters__actions__show}
 					disabled={spinner || resetFilterBTNDisabled}
-					onClick={applyFilters }
+					onClick={applyFilters}
 				>
 					{spinner ? (
 						<span
 							className={spinnerStyles.spinner}
 							style={{ top: 6, left: '47%' }}
-							
 						/>
 					) : (
 						<span>Показать</span>

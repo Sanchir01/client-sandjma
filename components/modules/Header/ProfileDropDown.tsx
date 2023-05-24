@@ -30,6 +30,7 @@ const ProfiledropDown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 
 		const handleLogout = async () => {
 			await logoutFx(`/users/logout`)
+			
 			return
 		}
 		const loginAuth = () => {

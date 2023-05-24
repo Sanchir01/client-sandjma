@@ -1,4 +1,5 @@
 import NameInput from '@/components/elements/Auth/NameInput'
+
 import PasswordInput from '@/components/elements/Auth/PasswordInput'
 import { AllAuth } from '@/service/Users.service'
 import styles from '@/styles/Auth/index.module.scss'

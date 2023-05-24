@@ -1,5 +1,5 @@
 import { ICheckboxItem } from '@/types/Catalog.interface'
-import { IClothParts, IClothPartsRows } from '@/types/ClotshParts.interface'
+import { IClothPartsRows } from '@/types/ClotshParts.interface'
 import { clothManufacturers, clothSize } from '@/utils/Catalog'
 import axios from 'axios'
 import { createDomain, createEffect } from 'effector-next'
@@ -31,6 +31,9 @@ export const setFilteredCloth = clothParts.createEvent()
 export const setSizeManufacturers = clothParts.createEvent<ICheckboxItem[]>()
 export const updateSizeManufacturers = clothParts.createEvent<ICheckboxItem>()
 
+export const setClothManufacturersFromQuery = clothParts.createEvent<string[]>()
+export const setSizeManufacturersFromQuery = clothParts.createEvent<string[]>()
+
 const updateManufacturer = (
 	manufacturers: ICheckboxItem[],
 	id: string,
@@ -41,6 +44,20 @@ const updateManufacturer = (
 			return {
 				...item,
 				...payload
+			}
+		}
+		return item
+	})
+
+const updateManufacturerFromQuery = (
+	manufacturers: ICheckboxItem[],
+	manufacturersFromQuery: string[]
+) =>
+	manufacturers.map(item => {
+		if (manufacturersFromQuery.find(title => title === item.title)) {
+			return {
+				...item,
+				checked: true
 			}
 		}
 		return item
@@ -70,6 +87,9 @@ export const $clothManufacturers = clothParts
 			checked: payload.checked
 		})
 	])
+	.on(setClothManufacturersFromQuery, (state, manufacturersFromQuery) => [
+		...updateManufacturerFromQuery(state, manufacturersFromQuery)
+	])
 
 export const $clothSizeManufacturers = clothParts
 	.createStore<ICheckboxItem[]>(clothSize as ICheckboxItem[])
@@ -78,6 +98,9 @@ export const $clothSizeManufacturers = clothParts
 		...updateManufacturer(state, payload.id as string, {
 			checked: payload.checked
 		})
+	])
+	.on(setSizeManufacturersFromQuery, (state, manufacturersFromQuery) => [
+		...updateManufacturerFromQuery(state, manufacturersFromQuery)
 	])
 
 export const $filteredCloth = clothParts

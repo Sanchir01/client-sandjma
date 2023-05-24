@@ -3,15 +3,19 @@ import {
 	$clothManufacturers,
 	$clothSizeManufacturers,
 	getBoilerPartsFx,
-	setFilteredCloth
+	setClothManufacturersFromQuery,
+	setFilteredCloth,
+	setSizeManufacturersFromQuery
 } from '@/effector/clothParts'
 import { useMediaQuery } from '@/hooks/useMediaquery'
 import { ICatalogFilterProps } from '@/types/Catalog.interface'
+import { CheckQueryParams } from '@/utils/Catalog'
 import { getQueryParamOnFirstRender } from '@/utils/common'
 import { useStore } from 'effector-react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import CatalogFiltersMobile from './CatalogFiltersMobile'
 import CatalogFiltersDesktop from './CatalogfiltersDesctop'
 
 const CatalogFilters = ({
@@ -22,7 +26,9 @@ const CatalogFilters = ({
 	resetFilter,
 	isPriceRangeChanged,
 	currentPage,
-	setIsFilterInQuery
+	setIsFilterInQuery,
+	closePopup,
+	filtersMobileOpen
 }: ICatalogFilterProps) => {
 	const isMobile = useMediaQuery(820)
 	const [spinner, setSpinner] = useState(false)
@@ -37,31 +43,100 @@ const CatalogFilters = ({
 
 	const applyFilterFromQuery = async () => {
 		try {
-			const priceFromQueryValue = getQueryParamOnFirstRender(
-				'priceFrom',
-				router
-			)
-			const priceToQueryValue = getQueryParamOnFirstRender('priceTo', router)
-			const clothAQueryValue = JSON.parse(
-				decodeURIComponent(
-					getQueryParamOnFirstRender('cloth', router) as string
-				)
-			)
-			const sizeQueryValue = JSON.parse(
-				decodeURIComponent(getQueryParamOnFirstRender('size', router) as string)
-			)
-			const isValidClothQuery =
-				Array.isArray(clothAQueryValue) && !!clothAQueryValue?.length
-			const isValidSizeQuery =
-				Array.isArray(sizeQueryValue) && !!sizeQueryValue?.length
+			const {
+				isValidClothQuery,
+				isValidSizeQuery,
+				isValidPriceQuery,
+				priceFromQueryValue,
+				priceToQueryValue,
+				clothAQueryValue,
+				sizeQueryValue
+			} = CheckQueryParams(router)
 
 			const clothQuery = `&cloth=${getQueryParamOnFirstRender('cloth', router)}`
 			const sizeQuery = `&size=${getQueryParamOnFirstRender('size', router)}`
 			const priceQuery = `&priceFrom=${priceFromQueryValue}&priceTo=${priceToQueryValue}`
-			if()
-		} catch (err) {}
-	}
 
+			if (isValidClothQuery && isValidSizeQuery && isValidPriceQuery) {
+				setIsFilterInQuery(true)
+				setPriceRange([+priceFromQueryValue, +priceToQueryValue])
+				setIsPriceRangeChanged(true)
+				setClothManufacturersFromQuery(clothAQueryValue)
+				setSizeManufacturersFromQuery(sizeQueryValue)
+				const data = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${currentPage}${priceQuery}${clothQuery}${sizeQuery}`
+				)
+				setFilteredCloth(data)
+			}
+
+			if (isValidPriceQuery) {
+				setIsFilterInQuery(true)
+				setPriceRange([+priceFromQueryValue, +priceToQueryValue])
+				setIsPriceRangeChanged(true)
+				const data = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${currentPage}${priceQuery}}`
+				)
+				setFilteredCloth(data)
+			}
+
+			if (isValidClothQuery && isValidSizeQuery) {
+				setIsFilterInQuery(true)
+				setClothManufacturersFromQuery(clothAQueryValue)
+				setSizeManufacturersFromQuery(sizeQueryValue)
+				const data = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${currentPage}${clothQuery}${sizeQuery}`
+				)
+				setFilteredCloth(data)
+			}
+
+			if (isValidClothQuery && isValidPriceQuery) {
+				setIsFilterInQuery(true)
+				setPriceRange([+priceFromQueryValue, +priceToQueryValue])
+				setIsPriceRangeChanged(true)
+				setClothManufacturersFromQuery(clothAQueryValue)
+				const data = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${currentPage}${priceQuery}${clothQuery}`
+				)
+				setFilteredCloth(data)
+			}
+
+			if (isValidSizeQuery && isValidPriceQuery) {
+				setIsFilterInQuery(true)
+				setPriceRange([+priceFromQueryValue, +priceToQueryValue])
+				setIsPriceRangeChanged(true)
+				setSizeManufacturersFromQuery(sizeQueryValue)
+				const data = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${currentPage}${priceQuery}${sizeQuery}`
+				)
+				setFilteredCloth(data)
+			}
+
+			if (isValidClothQuery) {
+				setIsFilterInQuery(true)
+				setClothManufacturersFromQuery(clothAQueryValue)
+				const data = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${currentPage}${clothQuery}`
+				)
+				setFilteredCloth(data)
+			}
+
+			if (isValidSizeQuery) {
+				setIsFilterInQuery(true)
+				setSizeManufacturersFromQuery(sizeQueryValue)
+				const data = await getBoilerPartsFx(
+					`/boiler-parts?limit=20&offset=${currentPage}${sizeQuery}`
+				)
+				setFilteredCloth(data)
+			}
+		} catch (err) {
+			const error = err as Error
+			if (error.message === 'URI malformed') {
+				toast.warning('Неправильный url для фильтров')
+				return
+			}
+			toast.error((err as Error).message)
+		}
+	}
 
 	const applyFilters = async () => {
 		setIsFilterInQuery(true)
@@ -263,7 +338,17 @@ const CatalogFilters = ({
 	return (
 		<div>
 			{isMobile ? (
-				<div />
+				<CatalogFiltersMobile
+					closePopup={closePopup}
+					spinner={spinner}
+					priceRange={priceRange}
+					applyFilters={applyFilters}
+					setIsPriceRangeChanged={setIsPriceRangeChanged}
+					setPriceRange={setPriceRange}
+					resetFilterBTNDisabled={resetFilterBTNDisabled}
+					resetFilter={resetFilter}
+					filtersMobileOpen={filtersMobileOpen}
+				/>
 			) : (
 				<CatalogFiltersDesktop
 					priceRange={priceRange}

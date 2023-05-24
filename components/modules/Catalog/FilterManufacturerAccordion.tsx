@@ -1,12 +1,7 @@
 import Accordion from '@/components/elements/Accordion/Accordion'
-import {
-	$clothManufacturers,
-	$clothSizeManufacturers
-} from '@/effector/clothParts'
 import { useMediaQuery } from '@/hooks/useMediaquery'
 import styles from '@/styles/Catalog/index.module.scss'
 import { IFilterManufacturerAccordionProps } from '@/types/Catalog.interface'
-import { useStore } from 'effector-react'
 import FilterCheckboxItem from './FilterCheckboxItem'
 
 const FilterManufacturerAccordion = ({
@@ -15,8 +10,6 @@ const FilterManufacturerAccordion = ({
 	title,
 	setManufacturer
 }: IFilterManufacturerAccordionProps) => {
-	const clothManufacturers = useStore($clothManufacturers)
-	const slothSize = useStore($clothSizeManufacturers)
 	const isMobile = useMediaQuery(820)
 	const chooseAllManufacturers = () =>
 		setManufacturer(manufacturerList.map(item => ({ ...item, checked: true })))
@@ -39,8 +32,8 @@ const FilterManufacturerAccordion = ({
 				<ul className={styles.filters__manufacturer__list}>
 					{manufacturerList.map(item => (
 						<FilterCheckboxItem
-							id={item.id}
 							title={item.title}
+							id={item.id}
 							key={item.id}
 							checked={item.checked}
 							event={updateManufacturer}
