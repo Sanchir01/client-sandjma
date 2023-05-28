@@ -1,16 +1,16 @@
-// import { HttpStatus } from '@/constans'
-// import { AxiosError } from 'axios'
-// import { toast } from 'react-toastify'
+import { HttpStatus } from '@/constans'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
-// export const showAuthError = (error: unknown) => {
-// 	const axiosError = error as AxiosError
+export const showAuthError = (error: unknown) => {
+	const axiosError = error as AxiosError
 
-// 	if (axiosError.response) {
-// 		if (axiosError.response.status === HttpStatus.UNAUTHORIZED  ) {
-// 			toast.error('Неверное имя пользователя или пароль')
-//             return 
-// 		}
-// 	}
-//     toast.error((error as Error).message)
+	if (axiosError.response) {
+		if (axiosError.response.status === HttpStatus.UNAUTHORIZED  ) {
+			toast.error('Неверное имя пользователя или пароль')
+            return 
+		}
+	}
+    toast.error((error as Error).message)
     
-// }
+}

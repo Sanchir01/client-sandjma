@@ -4,17 +4,17 @@ import styles from '@/styles/CartPopup/index.module.scss'
 
 import Link from 'next/link'
 
+import CartItemCounter from '@/components/elements/CartItemCounter/CartItemCounter'
 import DeleteSVG from '@/components/elements/DeleteSVG/DeleteSVG'
 import spinnerStyles from '@/styles/Spinner/index.module.scss'
 import { IShoppingCart } from '@/types/Shopping-car.interface'
-import { removeItemFromCart } from '@/utils/Shopping-cart'
+
+import { usePrice } from '@/hooks/usePrice'
 import { formatPrice } from '@/utils/common'
-import { useState } from 'react'
 
 const CartPopupItem = ({ item }: { item: IShoppingCart }) => {
-	const [spinner, setPinner] = useState(false)
-
-	const deleteCartItem = () => removeItemFromCart(item.partId, setPinner)
+	const { price, spinner, decreasePrice, deleteCartItem, increasePrice } =
+		usePrice(item.count, item.partId, item.price)
 
 	return (
 		<li className={styles.cart__popup__list__item}>
@@ -49,10 +49,16 @@ const CartPopupItem = ({ item }: { item: IShoppingCart }) => {
 						Нет на складе
 					</span>
 				) : (
-					<div />
+					<CartItemCounter
+						totalCount={item.in_stock}
+						partId={item.partId}
+						initialCount={item.count}
+						increasePrice={increasePrice}
+						decreasePrice={decreasePrice}
+					/>
 				)}
 				<span className={`${styles.cart__popup__list__item__price} `}>
-					{formatPrice(item.price)} P
+					{formatPrice(price )} P
 				</span>
 			</div>
 		</li>

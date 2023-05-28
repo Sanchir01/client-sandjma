@@ -1,6 +1,7 @@
 import EmailInput from '@/components/elements/Auth/EmailInput'
 import NameInput from '@/components/elements/Auth/NameInput'
 import PasswordInput from '@/components/elements/Auth/PasswordInput'
+import { singUpFx } from '@/effector/auth'
 import { AllAuth } from '@/service/Users.service'
 import styles from '@/styles/Auth/index.module.scss'
 import spinnerStyles from '@/styles/Spinner/index.module.scss'
@@ -31,7 +32,15 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
 	const onSubmit = async (data: IInput) => {
 		try {
 			setSpinner(true)
-			mutation.mutate(data)
+			const userData = await singUpFx({
+				url: `/user/signup`,
+				username: data.username,
+				password: data.password,
+				email: data.email
+			})
+			if(!userData){
+				return
+			}
 
 			resetField('username')
 			resetField('password')

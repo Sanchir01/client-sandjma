@@ -2,44 +2,69 @@ import styles from '@/styles/CartPopup/index.module.scss'
 import { IWrappedComponentProps } from '@/types/Common.interface'
 import { withClickOutside } from '@/utils/withClickOutside'
 import { AnimatePresence, motion } from 'framer-motion'
-import { forwardRef } from 'react'
+import { forwardRef, useEffect } from 'react'
 
 import ShoppingCartSVG from '@/components/elements/ShoppingCartSVG/ShoppingCartSVG'
-import { Dashboard } from '@/service/Dashboard.service'
-import { ShoppingCart } from '@/service/Shopping-cart.service'
+import {
+	$shoppingCart,
+	$totalPrice,
+	getCartItemsFx,
+	setShoppingCart,
+	setTotalPrice
+} from '@/effector/shopping-cart'
 import { AllAuth } from '@/service/Users.service'
-import { IUser } from '@/types/Auth.interface'
-import { IShoppingCart } from '@/types/Shopping-car.interface'
+import { formatPrice } from '@/utils/common'
 import { useQuery } from '@tanstack/react-query'
+import { useStore } from 'effector-react'
 import Link from 'next/link'
+import { toast } from 'react-toastify'
 import CartPopupItem from './CartPopupItem'
+import { $user } from '@/effector/user'
 
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 	({ open, setOpen }, ref) => {
 		const toggleCartDropDown = () => setOpen(!open)
+		const shoppingCart = useStore($shoppingCart)
+		const totalPrice = useStore($totalPrice)
+		const user = useStore($user)
 
-		const { data: id } = useQuery<IUser>({
+		const { data: check } = useQuery({
 			queryFn: () => AllAuth.loginCheck(),
-			queryKey: ['logicCheckID'],
-			onSuccess: id => ShoppingCart.getAll(id)
+			queryKey: ['check'],
+			
 		})
-		const { data, isSuccess } = useQuery<IShoppingCart[]>({
-			queryKey: ['shoppingCartAll', id],
-			enabled: !!id,
-			queryFn: () => ShoppingCart.getAll(id!),
-			keepPreviousData: true,
-			refetchInterval: 1000
-		})
-		const { data: cartCount, isSuccess: ok } = useQuery({
-			queryFn: () => Dashboard.getCartCount,
-			queryKey: ['countCart']
-		})
+
+		useEffect(() => {
+			loadCartItems()
+		}, [])
+
+		const loadCartItems = async () => {
+			try {
+				const cartItems = await getCartItemsFx(
+					`/shopping-cart/${check?.userId}`
+				)
+
+				setShoppingCart(cartItems)
+			} catch (error) {
+				toast.error((error as Error).message)
+			}
+		}
+		useEffect(() => {
+			setTotalPrice(
+				shoppingCart.reduce(
+					(defaultCount, item) => defaultCount + item.total_price,
+					0
+				)
+			)
+		}, [shoppingCart])
 
 		return (
 			<div className={styles.cart} ref={ref}>
 				<button className={styles.cart__btn} onClick={toggleCartDropDown}>
-					{isSuccess && (
-						<span className={styles.cart__btn__count}>{data.length}</span>
+					{!!shoppingCart.length && (
+						<span className={styles.cart__btn__count}>
+							{shoppingCart.length}
+						</span>
 					)}
 					<span className={styles.cart__svg}>
 						<ShoppingCartSVG />
@@ -57,10 +82,16 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 						>
 							<h3 className={styles.cart__popup__title}>Корзина</h3>
 							<ul className={styles.cart__popup__list}>
-								{isSuccess && data.length ? (
-									data.map(item => <CartPopupItem key={item.id} item={item} />)
+								{shoppingCart.length ? (
+									shoppingCart.map(item => (
+										<CartPopupItem key={item.id} item={item} />
+									))
 								) : (
-									<span className={styles.cart__popup__empty__text}>пусто</span>
+									<li className={styles.cart__popup__empty}>
+										<span className={`${styles.cart__popup__empty__text}`}>
+											Корзина пуста
+										</span>
+									</li>
 								)}
 							</ul>
 							<div className={styles.cart__popup__footer}>
@@ -68,14 +99,17 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
 									<span className={styles.cart__popup__footer__text}>
 										общая сумма заказа
 									</span>
-									<span className={styles.cart__popup__footer__price}>0</span>
+
+									<span className={styles.cart__popup__footer__price}>
+										{formatPrice(totalPrice)} P
+									</span>
 								</div>
 								<Link href={`/order`}>
 									<button
 										className={styles.cart__popup__footer__btn}
-										disabled={!data?.length}
+										disabled={!shoppingCart.length}
 									>
-										<span>оплатить заказ</span>
+										Оформить заказ
 									</button>
 								</Link>
 							</div>

@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
+import { singInFx } from '@/effector/auth'
 import spinnerStyles from '@/styles/Spinner/index.module.scss'
 import { useRouter } from 'next/router'
 
@@ -26,18 +27,21 @@ const SignInForm = () => {
 		onError: () => {
 			alert('неправильный пароль или никнейм')
 		},
-		onSuccess:() =>{
+		onSuccess: () => {
 			route.push('/')
 		}
 	})
 
-	const onSubmit = async (data: SignIn) => {
+	const onSubmit = async (data: IInput) => {
 		try {
-			mutation.mutate(data)
-			
+			await singInFx({
+				url: `/users/login`,
+				username: data.username,
+				password: data.password
+			})
+			route.push('/')
 			resetField('username')
 			resetField('password')
-			
 		} catch (error) {
 			return null
 		} finally {

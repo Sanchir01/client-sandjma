@@ -23,8 +23,7 @@ const CatalogItem = ({ item }: { item: IClothParts }) => {
 		queryKey: ['logic']
 	})
 	const isInCart = shoppingCart.some(cartItem => cartItem.partId === item.id)
-	const toggleToCart = () =>
-		toggleCartItem(id!.username, item.id, isInCart, setSpinner)
+	const toggleToCart = () => toggleCartItem(id!.username, item.id, isInCart)
 
 	return (
 		<li className={styles.catalog__list__item}>

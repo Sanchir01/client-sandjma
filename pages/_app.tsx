@@ -1,17 +1,28 @@
 import '@/styles/globals.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { withHydrate } from 'effector-next'
 import type { AppProps } from 'next/app'
 import NEXTNProgress from 'nextjs-progressbar'
-
-export default function App({ Component, pageProps }: AppProps) {
+import React, { useEffect, useState } from 'react'
+const enhance = withHydrate()
+function App({ Component, pageProps }: AppProps) {
 	const queryClient = new QueryClient()
+	const [mounted, setMounted] = useState(false)
+
+	useEffect(() => {
+		setMounted(true)
+	}, [])
 
 	return (
-		<>
-			<NEXTNProgress />
-			<QueryClientProvider  client={queryClient}>
-				<Component {...pageProps} />
-			</QueryClientProvider>
-		</>
+		mounted && (
+			<>
+				<NEXTNProgress />
+				<QueryClientProvider client={queryClient}>
+					<Component {...pageProps} />
+				</QueryClientProvider>
+			</>
+		)
 	)
 }
+
+export default enhance(App as React.FC<AppProps>)
